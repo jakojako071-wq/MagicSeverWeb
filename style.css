@@ -1,1 +1,32 @@
 *{box-sizing:border-box}body{margin:0;background:#0b1830;color:#f5f0df;font-family:system-ui,'Yu Gothic',sans-serif;line-height:1.7}header{background:#0c1b35e8;padding:18px 6%;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;position:sticky;top:0;z-index:2;border-bottom:1px solid #a88c52}a{color:#e9ca83}nav{display:flex;gap:18px;flex-wrap:wrap}h1,h2{font-family:Georgia,serif}h1{font-size:clamp(48px,9vw,100px);line-height:1.1;letter-spacing:.08em}h2{font-size:32px;color:#e9ca83}.hero{text-align:center;min-height:65vh;padding:80px 20px;background:radial-gradient(ellipse at 50% 40%,#254a72,#0b1830 70%)}.eyebrow{color:#dfc38a;letter-spacing:.2em}.section{padding:50px max(6%,calc((100% - 1100px)/2))}.alt{background:#142847}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.card{background:#1d3556;border:1px solid #76633f;border-radius:14px;padding:22px}button,.btn{background:#d7b76f;color:#10213b;padding:12px 22px;border:0;border-radius:6px;cursor:pointer;font-weight:700;text-decoration:none}button:disabled{opacity:.5}input,select,textarea{display:block;width:100%;padding:12px;margin:6px 0 14px;background:#fff;color:#10213b;border-radius:6px;border:1px solid #aaa}label{display:block;margin-top:10px}textarea{min-height:100px}form{max-width:620px}.muted,small{color:#b8c5d5}.notice{padding:12px;border:1px solid #987b4d;border-radius:6px;margin:12px 0}footer{padding:28px;text-align:center;border-top:1px solid #6b5836}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #53647d;text-align:left} .scroll{overflow:auto}
+
+/* Magic Server v5: responsive navigation and safe spacing */
+.site-header{align-items:center;min-height:76px;isolation:isolate}
+.site-header strong{font-size:1.1rem;white-space:nowrap}
+.desktop-nav{align-items:center}
+.mobile-menu{display:none}
+html{scroll-padding-top:100px;scroll-behavior:smooth}
+.section{scroll-margin-top:90px}
+#applyForm label{line-height:1.7}
+#applyForm input[type="checkbox"]{vertical-align:middle;margin-right:8px}
+@media(max-width:700px){
+ .site-header{padding:12px 5%;gap:10px;min-height:68px;flex-wrap:nowrap}
+ .site-header strong{font-size:1rem}
+ .desktop-nav{display:none}
+ .mobile-menu{display:block;margin-left:auto;position:relative}
+ .mobile-menu summary{cursor:pointer;list-style:none;border:1px solid #a88c52;border-radius:8px;padding:8px 12px;color:#f5f0df;white-space:nowrap;font-size:.9rem}
+ .mobile-menu summary::-webkit-details-marker{display:none}
+ .mobile-menu nav{position:absolute;top:calc(100% + 12px);right:0;display:flex;flex-direction:column;gap:0;width:min(78vw,280px);padding:8px;background:#142847;border:1px solid #a88c52;border-radius:12px;box-shadow:0 12px 30px #0008;z-index:10}
+ .mobile-menu nav a{display:block;padding:12px 14px;border-bottom:1px solid #ffffff20;text-decoration:none}
+ .mobile-menu nav a:last-child{border-bottom:0}
+ .hero{min-height:55vh;padding:64px 20px}
+ .hero h1{font-size:clamp(46px,13vw,74px);overflow-wrap:anywhere}
+ .section{padding:42px 6%}
+ .section h2{font-size:clamp(26px,8vw,36px);overflow-wrap:anywhere}
+ .cards{grid-template-columns:minmax(0,1fr)}
+ form{max-width:100%;min-width:0}
+ input,select,textarea{max-width:100%;font-size:16px}
+ #applyForm label:has(input[type="checkbox"]){display:block;overflow-wrap:anywhere}
+ html{scroll-padding-top:84px}
+ .section{scroll-margin-top:84px}
+}
