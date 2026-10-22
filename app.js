@@ -5,3 +5,21 @@ const any=$('event').options.length>0&&$('slot').options.length>0;$('applyForm')
 let upcoming=events.filter(e=>e.application_opens_at&&new Date(e.application_opens_at).getTime()>Date.now()).sort((a,b)=>new Date(a.application_opens_at)-new Date(b.application_opens_at));
 $('applicationStatus').textContent=any?'現在、応募受付中です。応募時点では招待確定ではありません。':upcoming.length?'現在受付中の企画はありません。次回受付開始：'+time(upcoming[0].application_opens_at):'現在、観光企画の応募受付は行っていません。';}
 $('event').addEventListener('change',refresh);if(MAGIC.map&&/^https:\/\//.test(MAGIC.map)){let a=el('a','Webマップを開く ↗');a.href=MAGIC.map;$('map').append(a)}$('applyForm').addEventListener('submit',async ev=>{ev.preventDefault();let tag=$('tag').value.trim();if(!/^[a-zA-Z0-9 _-]{1,16}$/.test(tag)){ $('message').textContent='ゲーマータグの形式を確認してください';return}let slot=slots.find(s=>s.id===$('slot').value);if(!slot||slot.event_id!==$('event').value||!isOpen(events.find(e=>e.id===slot.event_id))){$('message').textContent='この企画の応募受付は終了しています。';refresh();return;}let btn=ev.target.querySelector('button');btn.disabled=true;const {error}=await db.from('applications').insert({event_id:$('event').value,requested_slot_id:slot.id,gamertag:tag,note:$('note').value.slice(0,300)});$('message').textContent=error?'送信できませんでした。入力内容を確認してください。':'応募を受け付けました。招待確定ではありません。';btn.disabled=false;if(!error)ev.target.reset()});load();setInterval(refresh,15000);
+
+// v7 facilities: public reads only published rows under RLS.
+let facilities=[];const categoryNames={attraction:'アトラクション',restaurant:'レストラン',shop:'ショップ'};
+const fsearch=$('facilitySearch'),fcat=$('facilityCategory'),fpark=$('facilityPark');
+function renderFacilities(){
+ const target=$('facilityList');target.replaceChildren();const q=fsearch.value.trim().toLocaleLowerCase();
+ const items=facilities.filter(v=>(fcat.value==='all'||v.category===fcat.value)&&(fpark.value==='all'||v.park===fpark.value)&&[v.name,v.area,v.park].join(' ').toLocaleLowerCase().includes(q));
+ $('facilityMessage').textContent=items.length?'表示中：'+items.length+'件':'条件に合う施設はありません。';
+ for(const v of items){const c=el('article','');c.className='card facility-card';
+ c.append(el('p',categoryNames[v.category]+' / '+(v.park||'パーク未設定')+' / '+(v.area||'エリア未設定')),el('h3',v.name),el('p',v.status+' ・ '+(v.usage_mode==='usable'?'ゲーム内で利用可能':'紹介のみ')),el('p',v.description||''));
+ if(v.category==='attraction'){let label='待ち時間：';if(v.wait_minutes===null)label+='未掲載';else if(v.status!=='運営中')label+='現在の運営状況をご確認ください';else if(Date.now()-new Date(v.wait_updated_at).getTime()>30*60*1000)label+='更新待ち（最終 '+time(v.wait_updated_at)+'）';else label+=v.wait_minutes+'分（'+time(v.wait_updated_at)+' 更新）';c.append(el('p',label))}
+ if(v.details)c.append(el('p',v.details));
+ if(v.image_url&&/^https:\/\//i.test(v.image_url)){const im=document.createElement('img');im.src=v.image_url;im.alt=v.name+'の写真';im.loading='lazy';im.className='facility-image';c.prepend(im)}
+ if(v.video_url&&/^https:\/\//i.test(v.video_url)){const a=el('a','紹介動画を見る ↗');a.href=v.video_url;a.target='_blank';a.rel='noopener noreferrer';c.append(a)}target.append(c)
+ }
+}
+async function loadFacilities(){const r=await db.from('facilities').select('*').eq('published',true).order('sort_order').order('name');if(r.error){$('facilityMessage').textContent='施設情報を取得できません。v7 SQLを確認してください。';return}facilities=r.data||[];const parks=[...new Set(facilities.map(v=>v.park).filter(Boolean))].sort();fpark.replaceChildren();option(fpark,'all','すべてのパーク');for(const name of parks)option(fpark,name,name);renderFacilities()}
+[fsearch,fcat,fpark].forEach(x=>x.addEventListener('input',renderFacilities));loadFacilities();

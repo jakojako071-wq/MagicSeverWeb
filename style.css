@@ -30,3 +30,5 @@ html{scroll-padding-top:100px;scroll-behavior:smooth}
  html{scroll-padding-top:84px}
  .section{scroll-margin-top:84px}
 }
+
+.facility-controls{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0 24px}.facility-controls>*{flex:1 1 180px;min-width:0}.facility-card{overflow-wrap:anywhere}.facility-image{display:block;width:100%;height:180px;object-fit:cover;border-radius:10px;margin-bottom:12px}#facilityAdminList details{border:1px solid #b5a47b;border-radius:10px;padding:12px;margin:12px 0}#facilityAdminList summary{cursor:pointer;font-weight:700}#facilityAdminList form{margin-top:14px}#facilityForm{margin-bottom:30px}#facilityAdminStatus{min-height:1.5em}
